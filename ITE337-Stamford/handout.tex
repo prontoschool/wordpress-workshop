@@ -55,7 +55,7 @@
 to learn WordPress and do things the WordPress way. Participants will learn how
 to customize a WordPress theme and better understand how WordPress template
 hierarchy works. Participants will also learn how to develop a WordPress plugin
-to enhance the funtionality of the theme.  By the end of this workshop,
+to enhance the funtionality of the theme. By the end of this workshop,
 participants will be able to develop their own WordPress theme and use
 WordPress as a solution to real-world problems.
 
@@ -73,8 +73,8 @@ unmodified and redo this workshop as many times as we want.
     \item Go to the directory {\tt wp-content/themes/}.
     \item Duplicate the directory {\tt twentyfifteen} and rename it
         to {\tt thewordpressway}.
-    \item Open the file {\tt style.css}, remove the current settings, and use
-        these settings below:
+    \item Open the file {\tt style.css}, remove the current settings in the
+        comments, and use these settings below:
         \begin{itemize}
             \item[-] Theme Name: The WordPress Way
             \item[-] Author: {\tt put\_your\_name\_here}
@@ -87,56 +87,67 @@ unmodified and redo this workshop as many times as we want.
 Figure~\ref{fig:csim-logo}. Next we are going to make some simple change on a
 very simple template. Here the template like 404 page is a good start.
 
+\FloatBarrier
+
 \begin{figure}[t]
     \centering
-    \includegraphics[width=2in]{figures/csim}
-    \caption{CSIM Logo}
-    \label{fig:csim-logo}
+    \includegraphics[width=4in]{figures/activating-custom-theme}
+    \caption{Activating a Custom Theme}
+    \label{fig:activating-custom-theme}
 \end{figure}
 
 \begin{enumerate}
     \item Go to your theme directory {\tt wp-content/themes/thewordpressway}.
     \item Open the file {\tt 404.php}.
-    \item Make it more beautiful by putting a nice image from the Internet
-        somewhere on the page. Don't forget to put a credit if the image is
-        not yours.
-    \item When we visit an unknown page, we should see our nice image there.
+    \item Let's make it more attractive. Find any image from the Internet and
+        put it somewhere on the page. Don't forget to put a credit if the
+        image is not yours.
+    \item When we access a non-existing page such as
+        {\tt http://localhost/?p=99999}, we should see our nice custom
+        404 page.
 \end{enumerate}
 
 \noindent Your 404 page should look similar to the one shown in
-Figure~\ref{fig:csim-logo2}. Below is the code that does that.
+Figure~\ref{fig:custom-404-page}. Below is the code that does that.
 
 \begin{verbatim}
-def function():
-    print 'hello world'
-}
+<div id="primary" class="content-area">
+  <main id="main" class="site-main" role="main">
+    <section class="error-404 not-found">
+      <header class="page-header">
+        <h1 class="page-title">Oops! Sorry, this page doesn't exist.</h1>
+      </header>
+      <div class="page-content">
+        <p style="text-align: center;">
+          <img src="<?php echo get_template_directory_uri(); ?>/images/molodotme.jpg">
+        </p>
+        <p style="text-align: center;">
+          <strong>Credit:</strong> <a href="http://molome.com/" target="_blank">MOLOME</a>
+        </p>
+        <?php get_search_form(); ?>
+      </div>
+    </section>
+  <main>
+</div>
 \end{verbatim}
 
 \begin{figure}[t]
     \centering
-    \includegraphics[width=2in]{figures/csim}
-    \caption{CSIM Logo}
-    \label{fig:csim-logo2}
+    \includegraphics[width=3in]{figures/custom-404-page}
+    \caption{Custom 404 Page}
+    \label{fig:custom-404-page}
 \end{figure}
 
 \noindent Great work! Now you have an experience on customizing the WordPress
-template. We can then move to the next level, extending the template. \\
+template. You can upgrade yourself to the next level, extending the template.
+\\
 
-\noindent Let's look at the WordPress template hierarchy for a minute. Suppose
-we have our own custom post type and want to create a template for it. What
-should we do?
+\noindent {\bf Challange:} Let's look at the WordPress template hierarchy for a
+minute. Suppose we have our own custom post type and want to create a template
+for it. What should we do to accomplish this task? \\
 
-\begin{enumerate}
-    \item Create and register our custom post type.
-    \item Add a new post.
-    \item View the post.
-    \item The post should look similar to the normal post.
-    \item Create a new template.
-    \item View the post again.
-    \item The post should now look different from the normal post.
-\end{enumerate}
-
-%\FloatBarrier
+\noindent {\bf Hint:} Read {\tt
+http://codex.wordpress.org/Post\_Type\_Templates}.
 
 \section*{Developing WordPress Plugin}
 
