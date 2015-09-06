@@ -10,12 +10,13 @@
 
 \documentclass{article}
 
-\usepackage{a4,url,upquote}
+\usepackage{a4, url, upquote}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[cmex10]{amsmath}
 \usepackage{amssymb}
 \usepackage{placeins}
+\usepackage{listings}
 
 \setlength{\textwidth}{6.5in}
 \setlength{\textheight}{9in}
@@ -51,51 +52,96 @@
 \vspace{.15in}
 
 \noindent \textbf{Introduction:} This workshop is intended for anyone who wants
-    to learn WordPress and do things the WordPress way. Participants will
-    learn how to customize a WordPress theme and better understand how
-    WordPress template hierarchy works. Participants will also learn
-    how to develop a WordPress plugin to enhance the funtionality of the theme.
-    By the end of this workshop, participants will be able to develop their own
-    WordPress theme and use WordPress as a solution to real-world problems.
+to learn WordPress and do things the WordPress way. Participants will learn how
+to customize a WordPress theme and better understand how WordPress template
+hierarchy works. Participants will also learn how to develop a WordPress plugin
+to enhance the funtionality of the theme.  By the end of this workshop,
+participants will be able to develop their own WordPress theme and use
+WordPress as a solution to real-world problems.
 
 \section*{Customizing WordPress Theme}
 
-\noindent In this section, we will customize a WordPress theme, namely
-    ThirtyFifteen, and follow the WordPress template hierarchy~[1] to extend
-    a new template for a new custom post type. \\
+\noindent In this section, we will customize a WordPress theme
+``ThirtyFifteen'' and follow the WordPress template hierarchy~[1] to extend a
+new template for a new custom post type. Let's get started. \\
 
-workshop. Figure~\ref{fig:csim-logo} shows
-a logo of CSIM. \\
+\noindent We are going to duplicate the ThirtyFifteen theme and rename it to
+TheWordPressWay. Doing this way allows us to keep the originial theme
+unmodified and redo this workshop as many times as we want.
 
-\begin{itemize}
-    \item[-] {\tt code} - Folder that contains code and scripts
-    \begin{itemize}
-        \item[-] File {\tt workshop1.py}
-        \item[-] File {\tt workshop2.py}
-    \end{itemize}
-    \item[-] {\tt data} -- Folder that contains the datasets.
-    \begin{itemize}
-        \item[-] {\tt input} -- Folder that contains the input images.
+\begin{enumerate}
+    \item Go to the directory {\tt wp-content/themes/}.
+    \item Duplicate the directory {\tt twentyfifteen} and rename it
+        to {\tt thewordpressway}.
+    \item Open the file {\tt style.css}, remove the current settings, and use
+        these settings below:
         \begin{itemize}
-            \item[-] {\tt folder\_1} -- Folder that contains some files.
-            \item[-] {\tt folder\_2} -- Folder that contains some other files.
+            \item[-] Theme Name: The WordPress Way
+            \item[-] Author: {\tt put\_your\_name\_here}
+            \item[-] License: MIT
         \end{itemize}
-    \end{itemize}
-\end{itemize}
+    \item Go to your WordPress site and change the theme to The WordPress Way.
+\end{enumerate}
 
-\FloatBarrier
+\noindent Right now we should have The WordPress Way theme activated as seen in
+Figure~\ref{fig:csim-logo}. Next we are going to make some simple change on a
+very simple template. Here the template like 404 page is a good start.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=2in]{figures/csim}
+    \caption{CSIM Logo}
+    \label{fig:csim-logo}
+\end{figure}
+
+\begin{enumerate}
+    \item Go to your theme directory {\tt wp-content/themes/thewordpressway}.
+    \item Open the file {\tt 404.php}.
+    \item Make it more beautiful by putting a nice image from the Internet
+        somewhere on the page. Don't forget to put a credit if the image is
+        not yours.
+    \item When we visit an unknown page, we should see our nice image there.
+\end{enumerate}
+
+\noindent Your 404 page should look similar to the one shown in
+Figure~\ref{fig:csim-logo2}. Below is the code that does that.
+
+\begin{verbatim}
+def function():
+    print 'hello world'
+}
+\end{verbatim}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=2in]{figures/csim}
+    \caption{CSIM Logo}
+    \label{fig:csim-logo2}
+\end{figure}
+
+\noindent Great work! Now you have an experience on customizing the WordPress
+template. We can then move to the next level, extending the template. \\
+
+\noindent Let's look at the WordPress template hierarchy for a minute. Suppose
+we have our own custom post type and want to create a template for it. What
+should we do?
+
+\begin{enumerate}
+    \item Create and register our custom post type.
+    \item Add a new post.
+    \item View the post.
+    \item The post should look similar to the normal post.
+    \item Create a new template.
+    \item View the post again.
+    \item The post should now look different from the normal post.
+\end{enumerate}
+
+%\FloatBarrier
 
 \section*{Developing WordPress Plugin}
 
 \noindent We will do a simple workshop. Figure~\ref{fig:csim-logo} shows
 a logo of CSIM. \\
-
-\begin{figure}[t]
-    \centering
-    %\includegraphics[width=2in]{figures/csim}
-    \caption{CSIM Logo}
-    \label{fig:csim-logo}
-\end{figure}
 
 \noindent Let's follow these steps below.
 
