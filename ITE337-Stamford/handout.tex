@@ -77,7 +77,7 @@ unmodified and redo this workshop as many times as we want.
         comments, and use these settings below:
         \begin{itemize}
             \item[-] Theme Name: The WordPress Way
-            \item[-] Author: {\tt put\_your\_name\_here}
+            \item[-] Author: Kan Ouivirach
             \item[-] License: MIT
         \end{itemize}
     \item Go to your WordPress site and change the theme to The WordPress Way.
@@ -142,30 +142,107 @@ Figure~\ref{fig:custom-404-page}. Below is the code that does that.
 template. You can upgrade yourself to the next level, extending the template.
 \\
 
-\noindent {\bf Challange:} Let's look at the WordPress template hierarchy for a
+\noindent {\bf Challenge:} Let's look at the WordPress template hierarchy for a
 minute. Suppose we have our own custom post type and want to create a template
 for it. What should we do to accomplish this task? \\
 
-\noindent {\bf Hint:} Read {\tt
+\noindent {\bf Hint:} Look at the WordPress template hierarchy and read {\tt
 http://codex.wordpress.org/Post\_Type\_Templates}.
 
 \section*{Developing WordPress Plugin}
 
-\noindent We will do a simple workshop. Figure~\ref{fig:csim-logo} shows
-a logo of CSIM. \\
+\noindent In this section, we will create a simple plugin called My Awesome
+Team. The scenario is that you want to show how awesome your team is by listing
+your teammates on your WordPress site. You also want to be able to click on
+your teammate's name and see his/her brief information. Let's get your hand
+dirty! \\
 
-\noindent Let's follow these steps below.
+\noindent Create the plugin by following these steps below.
 
 \begin{enumerate}
-    \item Step 1
-    \item Step 2
-    \item Step 3
+    \item Create a new directory {\tt my-awesome-team} under the directory {\tt
+        wp-content/plugins}.
+    \item Create a new file {\tt my-awesome-team.php} under the new directory
+        {\tt my-awesome-team} and place the code below
+\begin{verbatim}
+<?php
+/*
+ * Plugin Name: My Awesome Team
+ * Description: A plugin to list my awesome teammates
+ * Author: Kan Ouivirach
+ */
+\end{verbatim}
+    \item Go to the Plugins page. If you have done it correctly, your plugin
+        will be listed as shown in Figure~\ref{fig:my-awesome-team-plugin}.
 \end{enumerate}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=3in]{figures/my-awesome-team-plugin}
+    \caption{My Awesome Team Plugin}
+    \label{fig:my-awesome-team-plugin}
+\end{figure}
+
+\noindent Next we are going to register the teammate custom post type since we
+would like to keep our teammate information in the database. For more
+information on registering a custom post type, see the Codex~[2]. Below is the
+code for registering our custom post type.
+
+\begin{verbatim}
+function teammate_setup_post_type() {
+  $labels = array(
+    'name'          => __( 'Teammates' ),
+    'singular_name' => __( 'Teammate' ),
+    'add_new'       => __( 'Add New' ),
+    'add_new_item'  => __( 'Add New Teammate' ),
+    'edit_item'     => __( 'Edit Teammate' ),
+    'new_item'      => __( 'New Teammate' ),
+    'all_items'     => __( 'All Teammate' ),
+    'view_item'     => __( 'View Teammate' ),
+    'search_items'  => __( 'Search Teammate' ),
+    'not_found'     => __( 'No Teammate Found' )
+  );
+
+  $args = array(
+    'labels'             => $labels,
+    'description'        => 'Teammate involved in attempting to achieve a common goal.',
+    'public'             => true,
+    'publicly_queryable' => true,
+    'has_archive'        => true,
+    'capability_type'    => 'page',
+    'show_ui'            => true,
+    'hierarchical'       => false,
+    'query_var'          => true,
+    'supports'           => array(
+      'title',
+      'editor',
+      'thumbnail'
+    ),
+    'show_in_nav_menus'  => false,
+  );
+  register_post_type( 'teammate', $args );
+}
+add_action( 'init', 'teammate_setup_post_type', 10 );
+\end{verbatim}
+
+\noindent If you have done this correctly, the teammate menu should be listed
+in the site as shown in Figure~\ref{fig:teammate-menu}. That's it! Now we can
+save our teammate information in the database. Simple, right? :-) \\
+
+\noindent However, our work is not done yet.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=6in]{figures/teammate-menu}
+    \caption{Teammate Menu}
+    \label{fig:teammate-menu}
+\end{figure}
 
 \section*{References}
 
 \begin{itemize}
-    \item[1] WordPress Template Hierarchy -- \tt{http://wphierarchy.com/}
+    \item[1] WordPress Template Hierarchy -- {\tt http://wphierarchy.com/}
+    \item[2] Register Post Type -- {\tt http://codex.wordpress.org/Function\_Reference/register\_post\_type}
 \end{itemize}
 
 \end{document}
