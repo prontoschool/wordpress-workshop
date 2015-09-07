@@ -84,8 +84,9 @@ unmodified and redo this workshop as many times as we want.
 \end{enumerate}
 
 \noindent Right now we should have The WordPress Way theme activated as seen in
-Figure~\ref{fig:csim-logo}. Next we are going to make some simple change on a
-very simple template. Here the template like 404 page is a good start.
+Figure~\ref{fig:fig:activating-custom-theme}. Next we are going to make some
+simple change on a very simple template. Here the template like 404 page is a
+good start.
 
 \FloatBarrier
 
@@ -146,8 +147,8 @@ template. You can upgrade yourself to the next level, extending the template.
 minute. Suppose we have our own custom post type and want to create a template
 for it. What should we do to accomplish this task? \\
 
-\noindent {\bf Hint:} Look at the WordPress template hierarchy and read {\tt
-http://codex.wordpress.org/Post\_Type\_Templates}.
+\noindent {\bf Hint:} Look at the WordPress template hierarchy and read Post
+Type Template~[2].
 
 \section*{Developing WordPress Plugin}
 
@@ -185,8 +186,8 @@ dirty! \\
 
 \noindent Next we are going to register the teammate custom post type since we
 would like to keep our teammate information in the database. For more
-information on registering a custom post type, see the Codex~[2]. Below is the
-code for registering our custom post type.
+information on registering a custom post type, see Register Post Type~[3].
+Below is the code for registering our custom post type.
 
 \begin{verbatim}
 function teammate_setup_post_type() {
@@ -229,8 +230,6 @@ add_action( 'init', 'teammate_setup_post_type', 10 );
 in the site as shown in Figure~\ref{fig:teammate-menu}. That's it! Now we can
 save our teammate information in the database. Simple, right? :-) \\
 
-\noindent However, our work is not done yet.
-
 \begin{figure}[t]
     \centering
     \includegraphics[width=6in]{figures/teammate-menu}
@@ -238,11 +237,130 @@ save our teammate information in the database. Simple, right? :-) \\
     \label{fig:teammate-menu}
 \end{figure}
 
+\noindent Our work is not done yet. We need to show our awesome teammates on
+the site, so let's create a page to show them. One way to do this is to
+manually put the information on the page with the code below. Don't forget to
+switch to the Text mode before place the code. Figure~\ref{fig:teammate-list}
+shows the result from the code.
+
+\begin{verbatim}
+<h4><a href="#" onClick="teammate_toggle('teammate_1')">Kan Ouivirach</a></h4>
+<p id="teammate_1" style="display: none;">Instructor</p>
+<h4><a href="#" onClick="teammate_toggle('teammate_2')">Navarat Pramuksan</a></h4>
+<p id="teammate_2" style="display: none;">Teaching Assistant</p>
+
+<script type="text/javascript">
+function teammate_toggle(id) {
+  var element = document.getElementById(id);
+  element.style.display = ((element.style.display != 'none') ? 'none' : 'block');
+}
+</script>
+\end{verbatim}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=4in]{figures/teammate-list}
+    \caption{Teammate List}
+    \label{fig:teammate-list}
+\end{figure}
+
+\noindent However, this way is not convenient for us to maintain our teammate
+list. The better way is to use the shortcode API~[4], which is a nice feature
+that enables us to generate content without inserting any HTML code. Let's
+build one! Open our plugin file {\tt my-awesome-team.php} and place the code
+below.
+
+\begin{verbatim}
+function teammate_shortcode( $atts ) {
+  $args = array(
+    'post_type' => 'teammate',
+    'order'     => 'ASC'
+  );
+
+  $html = '';
+
+  $posts = get_posts( $args );
+  foreach ( $posts as $post ) {
+    $html .= '<h4><a href="#" onClick=\'teammate_toggle("teammate_';
+    $html .= $post->ID;
+    $html .= '")\'>';
+    $html .= $post->post_title;
+    $html .= '</a></h4>';
+    $html .= '<p id="teammate_';
+    $html .= $post->ID;
+    $html .= '" style="display: none;">';
+    $html .= $post->post_content;
+    $html .= '</p>';
+  }
+
+  $html .= '<script type="text/javascript">';
+  $html .= 'function teammate_toggle(id) {';
+  $html .= 'var element = document.getElementById(id);';
+  $html .= 'element.style.display = ((element.style.display != "none") ? "none" : "block");';
+  $html .= '}';
+  $html .= '</script>';
+
+  return $html;
+}
+add_shortcode( 'teammate', 'teammate_shortcode' );
+\end{verbatim}
+
+\noindent What we just did is that we created a function to query the posts of
+which post type is {\tt teammate} and constructed the HTML and return it. At
+the end, we registered our function to the shortcode {\tt teammate}. \\
+
+\noindent Right now we can go back to edit the page and just put {\tt
+[teammate]} in the content. If we have done it correcly, we should have the
+result the same as shown in Figure~\ref{fig:teammate-list}. Well done! \\
+
+\noindent What if we want to limit the number of teammates to show? We can do
+that by allowing our shortcode to take parameters. WordPress has a nice
+function we can use called {\tt shortcode\_atts}~[4]. The description from
+Shortcode API~[5] says:
+
+\begin{quote}
+Combines user shortcode attributes with known attributes and fills in defaults
+when needed. The result will contain every key from the known attributes,
+merged with values from shortcode attributes.
+\end{quote}
+
+\noindent We can modify our code before we define the arguments for the
+function {\tt get\_posts} as follows.
+
+\begin{verbatim}
+$defined_atts = array(
+  'limit' => -1,
+);
+extract( shortcode_atts( $defined_atts, $atts ) );
+
+if ( $limit ) {
+    $posts_per_page = $limit;
+}
+
+$args = array(
+  'posts_per_page' => $posts_per_page,
+  'post_type'      => 'teammate',
+  'order'          => 'ASC'
+);
+\end{verbatim}
+
+\noindent Go back to edit the page. Change {\tt [teammate]} to {\tt [teammate
+limit=1]} and see what happens. Try to play around with it. :-) \\
+
+\noindent {\bf Challenge:} It is not so nice to render the JavaScript code
+along with the HTML we generate. It would be better if we can refactor it. \\
+
+\noindent {\bf Hint:} Look at the function {\tt wp\_enqueue\_script}~[6].
+
 \section*{References}
 
 \begin{itemize}
     \item[1] WordPress Template Hierarchy -- {\tt http://wphierarchy.com/}
-    \item[2] Register Post Type -- {\tt http://codex.wordpress.org/Function\_Reference/register\_post\_type}
+    \item[2] Post Type Template -- {\tt http://codex.wordpress.org/Post\_Type\_Templates}
+    \item[3] Register Post Type -- {\tt http://codex.wordpress.org/Function\_Reference/register\_post\_type}
+    \item[4] Function {\tt shortcode\_atts} -- {\tt https://codex.wordpress.org/Function\_Reference/shortcode\_atts}
+    \item[5] Shortcode API -- {\tt https://codex.wordpress.org/Shortcode\_API}
+    \item[6] Function {\tt wp\_enqueue\_script} -- {\tt https://codex.wordpress.org/Function\_Reference/wp\_enqueue\_script}
 \end{itemize}
 
 \end{document}
