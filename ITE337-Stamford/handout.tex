@@ -83,12 +83,12 @@ unmodified and redo this workshop as many times as we want.
     \item Go to your WordPress site and change the theme to The WordPress Way.
 \end{enumerate}
 
+\FloatBarrier
+
 \noindent Right now we should have The WordPress Way theme activated as seen in
 Figure~\ref{fig:activating-custom-theme}. Next we are going to make some simple
 change on a very simple template. Here the template like 404 page is a good
 start.
-
-\FloatBarrier
 
 \begin{figure}[t]
     \centering
@@ -101,11 +101,11 @@ start.
     \item Go to your theme directory {\tt wp-content/themes/thewordpressway}.
     \item Open the file {\tt 404.php}.
     \item Let's make it more attractive. Find any image from the Internet and
-        put it somewhere on the page. Don't forget to put a credit if the
-        image is not yours.
-    \item When we access a non-existing page such as
-        {\tt http://localhost/?p=99999}, we should see our nice custom
-        404 page.
+        save it in the directory {\tt images} inside your theme directory.
+    \item Put the image somewhere on the page. Don't forget to put a credit if
+        the image is not yours.
+    \item When we access a non-existing page such as {\tt
+        http://localhost/?p=99999}, we should see our nice custom 404 page.
 \end{enumerate}
 
 \noindent Your 404 page should look similar to the one shown in
@@ -138,6 +138,10 @@ Figure~\ref{fig:custom-404-page}. Below is the code that does that.
     \caption{Custom 404 Page}
     \label{fig:custom-404-page}
 \end{figure}
+
+\noindent The function {\tt get\_template\_directory\_uri} we use in the code
+above returns the template directory URI for the current theme. It is better to
+use it rather than hardcode the theme path. \\
 
 \noindent Great work! Now you have an experience on customizing the WordPress
 template. You can upgrade yourself to the next level, extending the template.
@@ -187,7 +191,8 @@ dirty! \\
 \noindent Next we are going to register the teammate custom post type since we
 would like to keep our teammate information in the database. For more
 information on registering a custom post type, see Register Post Type~[3].
-Below is the code for registering our custom post type.
+Below is the code for registering our custom post type. Place it in the plugin
+file {\tt my-awesome-team.php}.
 
 \begin{verbatim}
 function teammate_setup_post_type() {
@@ -348,9 +353,13 @@ $args = array(
 limit=1]} and see what happens. Try to play around with it. :-) \\
 
 \noindent {\bf Challenge:} It is not so nice to render the JavaScript code
-along with the HTML we generate. It would be better if we can refactor it. \\
+along with the HTML we generate. It would be better if we can refactor it into
+its own function. \\
 
-\noindent {\bf Hint:} Look at the function {\tt wp\_enqueue\_script}~[6].
+\noindent {\bf Hint:} Look at the function {\tt wp\_enqueue\_script}~[6]. Try
+to understand how we can use it here. \\
+
+\noindent Hope you enjoy the workshop!
 
 \section*{References}
 
